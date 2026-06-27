@@ -88,12 +88,31 @@ jobs:
           echo "context=$context" >> "$GITHUB_OUTPUT"
           echo "dockerfile=$dockerfile" >> "$GITHUB_OUTPUT"
 
+      - name: Resolve image tags
+        id: image-tags
+        env:
+          IMAGE: ${{ matrix.image }}
+        run: |
+          repo="${IMAGE%:*}"
+          tag="${IMAGE##*:}"
+          dated="${repo}:${TAG_DATE}-${SHORT_SHA}"
+
+          {
+            echo "$IMAGE"
+            echo "$dated"
+            if [ "$tag" = "v1" ]; then
+              echo "${repo}:latest"
+            fi
+          } > tags.txt
+
+          echo "tags<<EOF" >> "$GITHUB_OUTPUT"
+          cat tags.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: ${{ steps.paths.outputs.context }}
           file: ${{ steps.paths.outputs.dockerfile }}
           push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:latest
-            ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:${{ env.TAG_DATE }}-${{ env.SHORT_SHA }}
+          tags: ${{ steps.image-tags.outputs.tags }}
