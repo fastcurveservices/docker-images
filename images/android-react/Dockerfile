@@ -1,0 +1,15 @@
+# Use the OpenJDK 17 base image
+FROM android-openjdk17
+
+RUN apt update
+# We directly answer the questions asked using the printf statement
+RUN printf 'y\n1\n\1n' | apt install nodejs
+RUN apt install -y npm
+RUN npm -v 
+
+
+# Set working directory
+WORKDIR /workspace
+
+# Default command
+CMD ["bash"]

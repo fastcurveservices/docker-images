@@ -1,0 +1,66 @@
+[
+  {
+    "path": "images/android/8",
+    "image": "fastcurve/android-java-react:8"
+  },
+  {
+    "path": "images/android/11",
+    "image": "fastcurve/android-java-react:11"
+  },
+  {
+    "path": "images/android/17",
+    "image": "fastcurve/android-java-react:17"
+  },
+  {
+    "path": "images/android/21",
+    "image": "fastcurve/android-java-react:21"
+  },
+  {
+    "path": "images/android-react",
+    "image": "fastcurve/android-java-react:v1"
+  },
+  {
+    "path": "images/java/8",
+    "context": "images/java",
+    "dockerfile": "8/Dockerfile",
+    "image": "fastcurve/java:8"
+  },
+  {
+    "path": "images/java/11",
+    "context": "images/java",
+    "dockerfile": "11/Dockerfile",
+    "image": "fastcurve/java:11"
+  },
+  {
+    "path": "images/java/17",
+    "context": "images/java",
+    "dockerfile": "17/Dockerfile",
+    "image": "fastcurve/java:17"
+  },
+  {
+    "path": "images/java/21",
+    "context": "images/java",
+    "dockerfile": "21/Dockerfile",
+    "image": "fastcurve/java:21"
+  },
+  {
+    "path": "images/java/25",
+    "image": "fastcurve/java:25"
+  },
+  {
+    "path": "images/java/java-maven",
+    "image": "fastcurve/java-maven:v1"
+  },
+  {
+    "path": "images/java/java-node",
+    "image": "fastcurve/java-node:v1"
+  },
+  {
+    "path": "images/java/java-maven-node",
+    "image": "fastcurve/java-maven-node:v1"
+  },
+  {
+    "path": "images/jenkins",
+    "image": "fastcurve/jenkins:v1"
+  }
+]
