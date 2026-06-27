@@ -17,7 +17,8 @@
   },
   {
     "path": "images/android-react",
-    "image": "fastcurve/android-java-react:v1"
+    "image": "fastcurve/android-java-react:v1",
+    "tier": 2
   },
   {
     "path": "images/java/8",
@@ -45,6 +46,8 @@
   },
   {
     "path": "images/java/25",
+    "context": "images/java",
+    "dockerfile": "25/Dockerfile",
     "image": "fastcurve/java:25"
   },
   {
@@ -57,7 +60,8 @@
   },
   {
     "path": "images/java/java-maven-node",
-    "image": "fastcurve/java-maven-node:v1"
+    "image": "fastcurve/java-maven-node:v1",
+    "tier": 2
   },
   {
     "path": "images/jenkins",

@@ -1,5 +1,5 @@
 # Use the OpenJDK 8 base image
-FROM openjdk:8-jdk
+FROM eclipse-temurin:8-jdk
 
 # Set environment variables
 ENV ANDROID_HOME=/opt/android-sdk

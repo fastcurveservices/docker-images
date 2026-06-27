@@ -19,7 +19,8 @@ jobs:
   generate-matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix_tier1: ${{ steps.set-matrix.outputs.matrix_tier1 }}
+      matrix_tier2: ${{ steps.set-matrix.outputs.matrix_tier2 }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -29,29 +30,108 @@ jobs:
         env:
           FILTER_IMAGE: ${{ github.event.inputs.image }}
         run: |
-          matrix=$(jq -c \
+          entries=$(jq -c \
             --arg filter "$FILTER_IMAGE" \
             'if ($filter | length) > 0 then
               [.[] | select(.image == $filter)]
             else
               .
-            end | {include: .}' \
+            end' \
             images.json)
 
-          if [ "$(echo "$matrix" | jq '.include | length')" -eq 0 ]; then
+          if [ "$(echo "$entries" | jq 'length')" -eq 0 ]; then
             echo "No matching images found in images.json"
             exit 1
           fi
 
-          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          tier1=$(echo "$entries" | jq -c '[.[] | select((.tier // 1) == 1)] | {include: .}')
+          tier2=$(echo "$entries" | jq -c '[.[] | select((.tier // 1) == 2)] | {include: .}')
+
+          echo "matrix_tier1=$tier1" >> "$GITHUB_OUTPUT"
+          echo "matrix_tier2=$tier2" >> "$GITHUB_OUTPUT"
 
   build:
     needs: generate-matrix
+    if: needs.generate-matrix.outputs.matrix_tier1 != '{"include":[]}'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix_tier1) }}
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set commit short SHA
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
+
+      - name: Set date tag
+        run: echo "TAG_DATE=$(date +'%d-%m-%y')" >> "$GITHUB_ENV"
+
+      - name: Resolve build paths
+        id: paths
+        env:
+          IMAGE_PATH: ${{ matrix.path }}
+          IMAGE_CONTEXT: ${{ matrix.context }}
+          IMAGE_DOCKERFILE: ${{ matrix.dockerfile }}
+        run: |
+          context="${IMAGE_CONTEXT:-$IMAGE_PATH}"
+          dockerfile="${IMAGE_DOCKERFILE:-Dockerfile}"
+
+          if [[ "$dockerfile" != /* ]]; then
+            dockerfile="${context%/}/${dockerfile}"
+          fi
+
+          echo "context=$context" >> "$GITHUB_OUTPUT"
+          echo "dockerfile=$dockerfile" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve image tags
+        id: image-tags
+        env:
+          IMAGE: ${{ matrix.image }}
+        run: |
+          repo="${IMAGE%:*}"
+          tag="${IMAGE##*:}"
+          dated="${repo}:${TAG_DATE}-${SHORT_SHA}"
+
+          {
+            echo "$IMAGE"
+            echo "$dated"
+            if [ "$tag" = "v1" ]; then
+              echo "${repo}:latest"
+            fi
+          } > tags.txt
+
+          echo "tags<<EOF" >> "$GITHUB_OUTPUT"
+          cat tags.txt >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ steps.paths.outputs.context }}
+          file: ${{ steps.paths.outputs.dockerfile }}
+          push: true
+          tags: ${{ steps.image-tags.outputs.tags }}
+
+  build-tier2:
+    needs: [generate-matrix, build]
+    if: |
+      always() &&
+      needs.generate-matrix.outputs.matrix_tier2 != '{"include":[]}' &&
+      (needs.build.result == 'success' || needs.build.result == 'skipped')
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.matrix_tier2) }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4

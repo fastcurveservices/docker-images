@@ -1,16 +1,17 @@
 # Use the OpenJDK 11 base image (needed for Android tools)
-FROM openjdk:11-jdk
-
-
+FROM eclipse-temurin:11-jdk
 
 # Set environment variables
 ENV ANDROID_HOME=/opt/android-sdk
 ENV PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/build-tools:$PATH
-ENV JAVA11_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-# Set default Java version to 11 for Android tools
-ENV JAVA_HOME=$JAVA11_HOME
-ENV PATH=$JAVA_HOME/bin:$PATH
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Android SDK Command-line Tools
 RUN mkdir -p $ANDROID_HOME/cmdline-tools && \
