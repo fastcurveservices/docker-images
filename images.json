@@ -1,9 +1,5 @@
 [
   {
-    "path": "images/android/8",
-    "image": "fastcurve/android-java-react:8"
-  },
-  {
     "path": "images/android/11",
     "image": "fastcurve/android-java-react:11"
   },
