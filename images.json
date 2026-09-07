@@ -61,6 +61,16 @@
     "tier": 2
   },
   {
+    "path": "images/java-node-python/17",
+    "image": "fastcurve/java-node-python:17",
+    "tier": 2
+  },
+  {
+    "path": "images/java-node-python/25",
+    "image": "fastcurve/java-node-python:25",
+    "tier": 2
+  },
+  {
     "path": "images/java/java-maven-node",
     "image": "fastcurve/java-maven-node:v1",
     "tier": 2
