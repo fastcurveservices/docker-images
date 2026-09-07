@@ -63,12 +63,12 @@
   {
     "path": "images/java-node-python/17",
     "image": "fastcurve/java-node-python:17",
-    "tier": 2
+    "tier": 3
   },
   {
     "path": "images/java-node-python/25",
     "image": "fastcurve/java-node-python:25",
-    "tier": 2
+    "tier": 3
   },
   {
     "path": "images/java/java-maven-node",
