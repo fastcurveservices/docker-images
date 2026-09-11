@@ -4,6 +4,10 @@
     "image": "fastcurve/android-java-react:11"
   },
   {
+    "path": "images/gh-report",
+    "image": "fastcurve/gh-report:v1"
+  },
+  {
     "path": "images/android/17",
     "image": "fastcurve/android-java-react:17"
   },
