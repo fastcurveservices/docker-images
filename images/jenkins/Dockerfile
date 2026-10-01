@@ -1,4 +1,5 @@
-FROM jenkins/jenkins:latest
+FROM jenkins/jenkins:lts-jdk25
+
 USER root
 RUN apt-get update
 # install necessary packages to run docker
