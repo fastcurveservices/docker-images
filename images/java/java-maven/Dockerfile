@@ -1,5 +1,5 @@
-# Use the OpenJDK 17 base image
-FROM maven:3.9.6
+# Use the Maven + Temurin JDK 17 base image (Ubuntu Noble, maintained)
+FROM maven:3-eclipse-temurin-17-noble
 
 RUN apt update
 RUN java -version && mvn --version
