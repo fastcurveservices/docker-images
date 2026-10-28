@@ -4,6 +4,10 @@
     "image": "fastcurve/android-java-react:11"
   },
   {
+    "path": "images/android/11",
+    "image": "fastcurve/android-java:11"
+  },
+  {
     "path": "images/gh-report",
     "image": "fastcurve/gh-report:v1"
   },
@@ -12,8 +16,24 @@
     "image": "fastcurve/android-java-react:17"
   },
   {
+    "path": "images/android/17",
+    "image": "fastcurve/android-openjdk17:v2"
+  },
+  {
+    "path": "images/android/17",
+    "image": "fastcurve/android-java:17"
+  },
+  {
     "path": "images/android/21",
     "image": "fastcurve/android-java-react:21"
+  },
+  {
+    "path": "images/android/21",
+    "image": "fastcurve/android-java:21"
+  },
+  {
+    "path": "images/android/25",
+    "image": "fastcurve/android-java:25"
   },
   {
     "path": "images/android-react",

@@ -134,8 +134,7 @@ jobs:
     needs: [generate-matrix, build]
     if: |
       always() &&
-      needs.generate-matrix.outputs.matrix_tier2 != '{"include":[]}' &&
-      (needs.build.result == 'success' || needs.build.result == 'skipped')
+      needs.generate-matrix.outputs.matrix_tier2 != '{"include":[]}'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -209,8 +208,7 @@ jobs:
     needs: [generate-matrix, build-tier2]
     if: |
       always() &&
-      needs.generate-matrix.outputs.matrix_tier3 != '{"include":[]}' &&
-      (needs.build-tier2.result == 'success' || needs.build-tier2.result == 'skipped')
+      needs.generate-matrix.outputs.matrix_tier3 != '{"include":[]}'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
