@@ -75,6 +75,14 @@
     "image": "fastcurve/java-maven:v1"
   },
   {
+    "path": "images/node/24",
+    "image": "fastcurve/node:24"
+  },
+  {
+    "path": "images/node/26",
+    "image": "fastcurve/node:26"
+  },
+  {
     "path": "images/java-node/17",
     "image": "fastcurve/java-node:17",
     "tier": 2
